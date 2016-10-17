@@ -52,6 +52,14 @@ class EC2(AWS, ExceptionHandler):
     except Exception, e:
       self.onException(e)
 
+  def private_ip(self):
+    try:
+      self.ip_address = self.ec2.get_only_instances(instance_ids=self.instance_id)[0].private_ip_address
+      print "[%s] IP %s" % (self.instance_id, self.ip_address)
+      return self.ip_address
+    except Exception, e:
+      self.onException(e)
+
   def wait_for_state(self, desired_state="running"):
     print "[%s] Wait for: %s" % (self.instance_id, desired_state)
     while self.state() != desired_state:
